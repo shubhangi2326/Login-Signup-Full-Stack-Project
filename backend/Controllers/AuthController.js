@@ -1,7 +1,6 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');  // changed to bcryptjs
 const jwt = require('jsonwebtoken');
 const UserModel = require("../Models/User");
-
 
 const signup = async (req, res) => {
     try {
@@ -12,7 +11,7 @@ const signup = async (req, res) => {
                 .json({ message: 'User is already exist, you can login', success: false });
         }
         const userModel = new UserModel({ name, email, password });
-        userModel.password = await bcrypt.hash(password, 10);
+        userModel.password = await bcrypt.hash(password, 10);  // no change needed here
         await userModel.save();
         res.status(201)
             .json({
@@ -28,7 +27,6 @@ const signup = async (req, res) => {
     }
 }
 
-
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -38,7 +36,7 @@ const login = async (req, res) => {
             return res.status(403)
                 .json({ message: errorMsg, success: false });
         }
-        const isPassEqual = await bcrypt.compare(password, user.password);
+        const isPassEqual = await bcrypt.compare(password, user.password);  // no change needed here
         if (!isPassEqual) {
             return res.status(403)
                 .json({ message: errorMsg, success: false });
